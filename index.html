@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="km">
 <head>
-       <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>កម្មវិធីត្រៀមប្រឡងពេទ្យ - Medical Exam Prep</title>
 
@@ -13,13 +13,13 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="theme-color" content="#059669"> <!-- ពណ៌ Emerald-600 របស់ Tailwind សម្រាប់ Status bar -->
+    <meta name="theme-color" content="#059669">
 
     <!-- Social Media Crawling (Open Graph) -->
     <meta property="og:title" content="កម្មវិធីត្រៀមប្រឡង ឆមាស DES UHS  (Medical Exam Prep)">
     <meta property="og:description" content="កម្មវិធីសម្រាប់ត្រៀមប្រឡងពេទ្យ មានមេរៀន និងលំហាត់ប្រឡងសាកល្បង (MET01, MET02, MET03, MET04)">
     <meta property="og:image" content="https://github.com/cungbarrish-wq/des-quiz/blob/main/Screenshot%202026-07-25%20013052.png?raw=true">
-    <meta property="og:url" content="https://cungbarrish-wq.github.io/des-quiz/"> <!-- អ្នកអាចប្តូរ URL នេះនៅពេលដែលអ្នក Upload វេបសាយពិតប្រាកដ -->
+    <meta property="og:url" content="https://cungbarrish-wq.github.io/des-quiz/">
     <meta property="og:type" content="website">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -97,7 +97,7 @@
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
                     <h1 class="text-xl font-bold text-emerald-700">កម្មវិធីត្រៀមប្រឡងពេទ្យ</h1>
-                    <div class="w-10"></div> <!-- Spacer for centering -->
+                    <div class="w-10"></div> 
                 </div>
                 
                 <h1 class="hidden md:block text-2xl md:text-3xl font-bold text-emerald-700 mb-1">កម្មវិធីត្រៀមប្រឡងពេទ្យ</h1>
@@ -108,10 +108,8 @@
                     <button onclick="switchModule('MET02')" id="mod-MET02" class="module-btn flex-1 min-w-[80px] py-2 px-3 bg-white border border-slate-300 rounded-md text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors shadow-sm">MET02</button>
                     <button onclick="switchModule('MET03')" id="mod-MET03" class="module-btn flex-1 min-w-[80px] py-2 px-3 bg-white border border-slate-300 rounded-md text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors shadow-sm">MET03</button>
                     <button onclick="switchModule('MET04')" id="mod-MET04" class="module-btn flex-1 min-w-[80px] py-2 px-3 bg-white border border-slate-300 rounded-md text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors shadow-sm">MET04</button>
-
-		    <button onclick="switchModule('MET05')" id="mod-MET04" class="module-btn flex-1 min-w-[80px] py-2 px-3 bg-white border border-slate-300 rounded-md text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors shadow-sm">MET04</button>
-		    <button onclick="switchModule('MET06')" id="mod-MET04" class="module-btn flex-1 min-w-[80px] py-2 px-3 bg-white border border-slate-300 rounded-md text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors shadow-sm">MET04</button>
-
+		            <button onclick="switchModule('MET05')" id="mod-MET05" class="module-btn flex-1 min-w-[80px] py-2 px-3 bg-white border border-slate-300 rounded-md text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors shadow-sm">MET05</button>
+		            <button onclick="switchModule('MET06')" id="mod-MET06" class="module-btn flex-1 min-w-[80px] py-2 px-3 bg-white border border-slate-300 rounded-md text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors shadow-sm">MET06</button>
 
                     <button onclick="switchModule('ALL')" id="mod-ALL" class="module-btn flex-1 min-w-[100px] py-2 px-3 bg-gradient-to-r from-emerald-500 to-teal-500 border border-transparent rounded-md text-sm font-bold text-white hover:from-emerald-600 hover:to-teal-600 transition-colors shadow-md">Quiz រួម (All)</button>
                 </div>
@@ -511,7 +509,8 @@
       ];
 
 	  const dataMET06 = [
-            "id": 1,
+        {
+    "id": 1,
     "question": "1) សញ្ញាដែលបញ្ជាក់ថាទារកទទួលទឹកដោះមិនបានគ្រប់គ្រាន់គឺ",
     "image": "",
     "correct": "ការឡើងទំងន់តិចនិងបរិមាណទឹកនោមតិចហើយខាប់",
@@ -554,9 +553,9 @@
             'MET02': dataMET02,
             'MET03': dataMET03,
             'MET04': dataMET04,
-	    'MET04': dataMET05,
-	    'MET04': dataMET06,
-            'ALL': [...dataMET01, ...dataMET02, ...dataMET03, ...dataMET04, ..dataMET05, ..dataMET06]
+	        'MET05': dataMET05,
+	        'MET06': dataMET06,
+            'ALL': [...dataMET01, ...dataMET02, ...dataMET03, ...dataMET04, ...dataMET05, ...dataMET06]
         };
 
         // Current active dataset
@@ -581,8 +580,8 @@
                 'MET02': { mode: 'quiz', questions: [], currentIndex: 0, score: 0, hasAnsweredCurrent: false, checklistProgress: {}, gameProgress: {} },
                 'MET03': { mode: 'quiz', questions: [], currentIndex: 0, score: 0, hasAnsweredCurrent: false, checklistProgress: {}, gameProgress: {} },
                 'MET04': { mode: 'quiz', questions: [], currentIndex: 0, score: 0, hasAnsweredCurrent: false, checklistProgress: {}, gameProgress: {} },
-	 	'MET05': { mode: 'quiz', questions: [], currentIndex: 0, score: 0, hasAnsweredCurrent: false, checklistProgress: {}, gameProgress: {} },
-		'MET06': { mode: 'quiz', questions: [], currentIndex: 0, score: 0, hasAnsweredCurrent: false, checklistProgress: {}, gameProgress: {} },
+	 	        'MET05': { mode: 'quiz', questions: [], currentIndex: 0, score: 0, hasAnsweredCurrent: false, checklistProgress: {}, gameProgress: {} },
+		        'MET06': { mode: 'quiz', questions: [], currentIndex: 0, score: 0, hasAnsweredCurrent: false, checklistProgress: {}, gameProgress: {} },
                 'ALL':   { mode: 'quiz', questions: [], currentIndex: 0, score: 0, hasAnsweredCurrent: false, checklistProgress: {}, gameProgress: {} }
             }
         };
