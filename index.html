@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+       <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>កម្មវិធីត្រៀមប្រឡងពេទ្យ - Medical Exam Prep</title>
+
+    <!-- រូបតំណាង (Favicon & Icons) -->
+    <link rel="icon" type="image/png" href="https://github.com/cungbarrish-wq/des-quiz/blob/main/Screenshot%202026-07-25%20013052.png?raw=true">
+    <link rel="apple-touch-icon" href="https://github.com/cungbarrish-wq/des-quiz/blob/main/Screenshot%202026-07-25%20013052.png?raw=true">
+    
+    <!-- PWA Web App Manifest Settings -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#059669"> <!-- ពណ៌ Emerald-600 របស់ Tailwind សម្រាប់ Status bar -->
+
+    <!-- Social Media Crawling (Open Graph) -->
+    <meta property="og:title" content="កម្មវិធីត្រៀមប្រឡង ឆមាស DES UHS  (Medical Exam Prep)">
+    <meta property="og:description" content="កម្មវិធីសម្រាប់ត្រៀមប្រឡងពេទ្យ មានមេរៀន និងលំហាត់ប្រឡងសាកល្បង (MET01, MET02, MET03, MET04)">
+    <meta property="og:image" content="https://github.com/cungbarrish-wq/des-quiz/blob/main/Screenshot%202026-07-25%20013052.png?raw=true">
+    <meta property="og:url" content="https://cungbarrish-wq.github.io/des-quiz/"> <!-- អ្នកអាចប្តូរ URL នេះនៅពេលដែលអ្នក Upload វេបសាយពិតប្រាកដ -->
+    <meta property="og:type" content="website">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* ពុម្ពអក្សរខ្មែរ */
+        @import url('https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&display=swap');
+        body {
+            font-family: 'Battambang', system-ui, -apple-system, sans-serif;
+        }
+        
+        .correct-answer-highlight {
+            background-color: #d1fae5;
+            border-left: 4px solid #059669;
+        }
+
+        .checklist-item {
+            scroll-margin-top: 2rem;
+        }
+
+        input:checked ~ #bg-toggle-q, input:checked ~ #bg-toggle-a, input:checked ~ #bg-toggle-auto { background-color: #059669; }
+        input:checked ~ #dot-toggle-q, input:checked ~ #dot-toggle-a, input:checked ~ #dot-toggle-auto { transform: translateX(1.5rem); }
+        
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* Active state for module buttons */
+        .module-btn.active {
+            background-color: #059669; /* Emerald 600 */
+            color: white;
+            border-color: #059669;
+        }
+    </style>
+</head>
+<body class="text-slate-800 bg-slate-100 h-screen overflow-hidden flex">
+
+    <aside id="sidebar-tracker" class="fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-200 shadow-2xl md:shadow-none transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 flex flex-col">
+        <div class="p-4 border-b flex justify-between items-center bg-slate-50">
+            <h2 class="font-bold text-lg text-emerald-800 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                លំដាប់សំណួរ
+            </h2>
+            <button onclick="toggleSidebar()" class="md:hidden text-slate-500 hover:text-slate-800 bg-slate-200 p-1 rounded">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <div class="p-4 bg-white text-xs text-slate-600 flex flex-col gap-2.5 border-b shrink-0 shadow-sm z-10">
+            <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-full border border-slate-300 bg-white shadow-sm"></div> មិនទាន់ឆ្លើយ (Unanswered)</div>
+            <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-full border-2 border-sky-400 bg-sky-100 shadow-sm"></div> កំពុងឆ្លើយ (Current)</div>
+            <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-full border border-emerald-600 bg-emerald-500 shadow-sm"></div> ត្រូវ (Correct)</div>
+            <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-full border border-red-600 bg-red-500 shadow-sm"></div> ខុស (Incorrect)</div>
+        </div>
+        <div id="question-circles-container" class="flex-1 overflow-y-auto custom-scrollbar p-4 flex flex-wrap gap-2.5 content-start bg-slate-50">
+        </div>
+    </aside>
+
+    <div id="sidebar-overlay" class="fixed inset-0 bg-slate-900/40 z-30 hidden md:hidden backdrop-blur-sm transition-opacity" onclick="toggleSidebar()"></div>
+
+    <main class="flex-1 h-full overflow-y-auto relative custom-scrollbar scroll-smooth">
+        <div class="max-w-4xl mx-auto p-4 md:p-6 pb-20">
+            
+            <header class="text-center mb-6 relative flex items-center justify-center flex-col">
+                <div class="w-full flex justify-between items-center mb-4 md:hidden">
+                     <button onclick="toggleSidebar()" class="p-2 text-slate-600 hover:bg-slate-200 rounded-md bg-white shadow-sm border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                    <h1 class="text-xl font-bold text-emerald-700">កម្មវិធីត្រៀមប្រឡងពេទ្យ</h1>
+                    <div class="w-10"></div> <!-- Spacer for centering -->
+                </div>
+                
+                <h1 class="hidden md:block text-2xl md:text-3xl font-bold text-emerald-700 mb-1">កម្មវិធីត្រៀមប្រឡងពេទ្យ</h1>
+                <p class="text-slate-500 text-sm md:text-base mb-4">ជ្រើសរើសផ្នែកខាងក្រោម</p>
+
+                <div class="flex flex-wrap justify-center gap-2 mb-2 w-full">
+                    <button onclick="switchModule('MET01')" id="mod-MET01" class="module-btn flex-1 min-w-[80px] py-2 px-3 bg-white border border-slate-300 rounded-md text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors shadow-sm active">MET01</button>
+                    <button onclick="switchModule('MET02')" id="mod-MET02" class="module-btn flex-1 min-w-[80px] py-2 px-3 bg-white border border-slate-300 rounded-md text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors shadow-sm">MET02</button>
+                    <button onclick="switchModule('MET03')" id="mod-MET03" class="module-btn flex-1 min-w-[80px] py-2 px-3 bg-white border border-slate-300 rounded-md text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors shadow-sm">MET03</button>
+                    <button onclick="switchModule('MET04')" id="mod-MET04" class="module-btn flex-1 min-w-[80px] py-2 px-3 bg-white border border-slate-300 rounded-md text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors shadow-sm">MET04</button>
+
+		    <button onclick="switchModule('MET05')" id="mod-MET04" class="module-btn flex-1 min-w-[80px] py-2 px-3 bg-white border border-slate-300 rounded-md text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors shadow-sm">MET04</button>
+		    <button onclick="switchModule('MET06')" id="mod-MET04" class="module-btn flex-1 min-w-[80px] py-2 px-3 bg-white border border-slate-300 rounded-md text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors shadow-sm">MET04</button>
+
+
+                    <button onclick="switchModule('ALL')" id="mod-ALL" class="module-btn flex-1 min-w-[100px] py-2 px-3 bg-gradient-to-r from-emerald-500 to-teal-500 border border-transparent rounded-md text-sm font-bold text-white hover:from-emerald-600 hover:to-teal-600 transition-colors shadow-md">Quiz រួម (All)</button>
+                </div>
+            </header>
+
+            <div class="flex bg-white rounded-t-lg shadow-sm overflow-hidden flex-wrap">
+                <button id="tab-lesson" onclick="switchTab('lesson')" class="flex-1 py-3 px-2 text-center font-bold text-emerald-700 bg-emerald-50 border-b-2 border-emerald-600 transition-colors min-w-[120px]">
+                    <svg class="w-5 h-5 inline-block mr-1 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    មេរៀន (Lesson)
+                </button>
+                <button id="tab-quiz" onclick="switchTab('quiz')" class="flex-1 py-3 px-2 text-center font-bold text-slate-500 hover:bg-slate-50 border-b-2 border-transparent transition-colors min-w-[120px]">
+                    <svg class="w-5 h-5 inline-block mr-1 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    Game Mode
+                </button>
+                <button id="tab-checklist" onclick="switchTab('checklist')" class="flex-1 py-3 px-2 text-center font-bold text-slate-500 hover:bg-slate-50 border-b-2 border-transparent transition-colors min-w-[120px]">
+                    <svg class="w-5 h-5 inline-block mr-1 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Checklist Mode
+                </button>
+            </div>
+
+            <div id="section-lesson" class="bg-white p-6 rounded-b-lg shadow-sm">
+                <div class="flex justify-between items-center mb-6 border-b pb-4 flex-wrap gap-4">
+                    <h2 class="text-xl font-bold text-slate-800" id="lesson-title">មេរៀន MET01</h2>
+                    <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">ចម្លើយត្រូវមានពណ៌បៃតង</span>
+                </div>
+                <div id="lesson-container" class="space-y-8">
+                </div>
+            </div>
+
+            <div id="section-quiz" class="bg-white p-6 rounded-b-lg shadow-sm hidden">
+                <div class="flex flex-wrap justify-between items-center mb-6 border-b pb-4 gap-4">
+                    <div class="flex items-center gap-4">
+                        <span id="question-tracker" class="font-bold text-slate-600 bg-slate-100 px-3 py-1 rounded-md shadow-inner">សំណួរទី 1 / 20</span>
+                        <span id="score-tracker" class="font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-md border border-emerald-100 shadow-sm">ពិន្ទុ: 0</span>
+                    </div>
+                    
+                    <div class="flex gap-2">
+                        <button onclick="openSettings()" class="flex items-center gap-1 bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-md transition-colors text-sm font-bold shadow-sm border border-slate-200">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            <span class="hidden sm:inline">កំណត់</span>
+                        </button>
+                        <button onclick="promptRestart()" class="flex items-center gap-1 bg-red-50 hover:bg-red-100 text-red-600 px-3 py-2 rounded-md transition-colors text-sm font-bold shadow-sm border border-red-100">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            <span class="hidden sm:inline">ចាប់ផ្តើមថ្មី</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="quiz-active-area">
+                    <h3 id="quiz-question-text" class="text-xl font-bold text-slate-800 mb-4 leading-relaxed"></h3>
+                    <div id="quiz-image-container" class="mb-6 hidden">
+                        <img id="quiz-image" src="" alt="Question Image" class="max-w-full md:max-w-2xl h-auto rounded-lg shadow-sm border border-slate-200">
+                    </div>
+                    
+                    <div id="quiz-options-container" class="space-y-3 mb-6">
+                    </div>
+
+                    <div id="quiz-feedback" class="hidden p-4 rounded-lg mb-6 font-bold text-lg"></div>
+
+                    <div class="flex gap-4">
+                        <button id="btn-submit" onclick="submitAnswer()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-all active:scale-95 w-full md:w-auto">
+                            បញ្ជូនចម្លើយ
+                        </button>
+                        <button id="btn-next" onclick="nextQuestion()" class="hidden bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-all active:scale-95 w-full md:w-auto">
+                            សំណួរបន្ទាប់ <svg class="w-5 h-5 inline-block ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="quiz-completed-area" class="hidden text-center py-10">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-emerald-100 rounded-full mb-6">
+                        <svg class="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h2 class="text-3xl font-bold text-slate-800 mb-2">ការប្រឡងបានបញ្ចប់!</h2>
+                    <p class="text-slate-500 mb-6">អ្នកបានឆ្លើយចប់គ្រប់សំណួរហើយ។</p>
+                    <div class="text-5xl font-bold text-emerald-600 mb-8" id="final-score-text"></div>
+                    <button onclick="forceRestart()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-8 rounded-lg shadow-md transition-transform active:scale-95 inline-flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        ប្រឡងម្តងទៀត
+                    </button>
+                </div>
+            </div>
+
+            <div id="section-checklist" class="bg-white p-6 rounded-b-lg shadow-sm hidden">
+                <div class="flex flex-wrap justify-between items-center mb-6 border-b pb-4 gap-4">
+                    <div class="flex items-center gap-4">
+                        <h2 class="text-xl font-bold text-slate-800">Checklist Mode</h2>
+                        <span id="checklist-tracker" class="font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-md border border-emerald-100 shadow-inner">បញ្ចប់: 0/0</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="openSettings()" class="flex items-center gap-1 bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-md transition-colors text-sm font-bold shadow-sm border border-slate-200">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            <span class="hidden sm:inline">កំណត់</span>
+                        </button>
+                        <button onclick="promptRestart()" class="flex items-center gap-1 bg-red-50 hover:bg-red-100 text-red-600 px-3 py-2 rounded-md transition-colors text-sm font-bold shadow-sm border border-red-100">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            <span class="hidden sm:inline">ចាប់ផ្តើមថ្មី</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="checklist-container" class="space-y-8">
+                </div>
+                
+                <div id="checklist-completed-message" class="hidden text-center py-8 mt-8 border-t border-slate-200 bg-emerald-50 rounded-lg">
+                     <h3 class="text-2xl font-bold text-emerald-600 mb-2">អបអរសាទរ! អ្នកបានពិនិត្យគ្រប់សំណួរហើយ។</h3>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="modal-settings" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center z-50 p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[90vh] transform transition-all">
+            <div class="bg-slate-50 px-6 py-4 border-b flex justify-between items-center shrink-0">
+                <h3 class="font-bold text-lg text-slate-800">ការកំណត់ប្រឡង (Quiz Settings)</h3>
+                <button onclick="closeSettings()" class="text-slate-400 hover:text-slate-700 bg-slate-200 hover:bg-slate-300 rounded p-1 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-6 space-y-6 overflow-y-auto custom-scrollbar grow">
+                <div class="border-b pb-6">
+                    <div class="font-bold text-slate-800 mb-2">ជួរលេខសំណួរ (Question Range)</div>
+                    <div class="text-sm text-slate-500 mb-4">កំណត់ចំនួនសំណួរដែលចង់ធ្វើ។ មានសរុប <span id="total-q-count" class="font-bold text-emerald-600">0</span> សំណួរក្នុងផ្នែកនេះ។</div>
+                    <div class="flex items-center gap-4">
+                        <div class="flex-1">
+                            <label class="block text-xs font-bold text-slate-600 mb-1">ពី (From):</label>
+                            <input type="number" id="setting-range-start" min="1" class="w-full border border-slate-300 rounded-md px-3 py-2 text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" value="1">
+                        </div>
+                        <div class="flex-1">
+                            <label class="block text-xs font-bold text-slate-600 mb-1">ដល់ (To):</label>
+                            <input type="number" id="setting-range-end" min="1" class="w-full border border-slate-300 rounded-md px-3 py-2 text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+                        </div>
+                    </div>
+                    <div id="range-error" class="text-red-500 text-xs mt-2 hidden bg-red-50 p-2 rounded">ជួរលេខមិនត្រឹមត្រូវទេ!</div>
+                </div>
+
+                <label class="flex items-center justify-between cursor-pointer group pb-4 border-b">
+                    <div>
+                        <div class="font-bold text-slate-800">Auto Next (Game Mode)</div>
+                        <div class="text-sm text-slate-500">ប្តូរសំណួរបន្ទាប់ស្វ័យប្រវត្តិ បន្ទាប់ពីជ្រើសរើសចម្លើយ។</div>
+                    </div>
+                    <div class="relative ml-4 shrink-0">
+                        <input type="checkbox" id="setting-auto-next" class="sr-only">
+                        <div class="block bg-slate-200 w-12 h-7 rounded-full transition-colors shadow-inner" id="bg-toggle-auto"></div>
+                        <div class="dot absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition-transform shadow" id="dot-toggle-auto"></div>
+                    </div>
+                </label>
+
+                <label class="flex items-center justify-between cursor-pointer group pb-4 border-b">
+                    <div>
+                        <div class="font-bold text-slate-800">ច្របល់សំណួរ (Shuffle Questions)</div>
+                        <div class="text-sm text-slate-500">ប្តូរទីតាំងសំណួរដោយចៃដន្យ។</div>
+                    </div>
+                    <div class="relative ml-4 shrink-0">
+                        <input type="checkbox" id="setting-shuffle-q" class="sr-only">
+                        <div class="block bg-slate-200 w-12 h-7 rounded-full transition-colors shadow-inner" id="bg-toggle-q"></div>
+                        <div class="dot absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition-transform shadow" id="dot-toggle-q"></div>
+                    </div>
+                </label>
+                
+                <label class="flex items-center justify-between cursor-pointer group">
+                    <div>
+                        <div class="font-bold text-slate-800">ច្របល់ចម្លើយ (Shuffle Answers)</div>
+                        <div class="text-sm text-slate-500">ប្តូរទីតាំងចម្លើយដោយចៃដន្យ។</div>
+                    </div>
+                    <div class="relative ml-4 shrink-0">
+                        <input type="checkbox" id="setting-shuffle-a" class="sr-only">
+                        <div class="block bg-slate-200 w-12 h-7 rounded-full transition-colors shadow-inner" id="bg-toggle-a"></div>
+                        <div class="dot absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition-transform shadow" id="dot-toggle-a"></div>
+                    </div>
+                </label>
+            </div>
+            <div class="px-6 py-4 bg-slate-50 border-t flex justify-end shrink-0 gap-3">
+                <button onclick="closeSettings()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold py-2 px-4 rounded-lg transition-colors">
+                    បិទ
+                </button>
+                <button onclick="closeSettingsAndRestartIfChanged()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-lg transition-colors shadow-md">
+                    រក្សាទុក & ចាប់ផ្តើមថ្មី
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-resume" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center z-50 p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm overflow-hidden text-center transform transition-all">
+            <div class="p-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 text-blue-600 rounded-full mb-4 ring-4 ring-blue-50">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h3 class="font-bold text-xl text-slate-800 mb-2">បន្តការប្រឡង?</h3>
+                <p class="text-slate-600 mb-6">អ្នកមានទិន្នន័យប្រឡងចាស់សម្រាប់ផ្នែកនេះ តើអ្នកចង់បន្តធ្វើវា ឬចាប់ផ្តើមថ្មី?</p>
+                <div class="flex flex-col gap-3">
+                    <button onclick="resumeSession()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-lg transition-colors shadow-md w-full">
+                        បន្តការប្រឡង (Resume)
+                    </button>
+                    <button onclick="forceRestart(); closeResumeModal();" class="bg-white hover:bg-slate-50 text-slate-700 font-bold py-3 px-4 rounded-lg transition-colors w-full border border-slate-300 shadow-sm">
+                        ចាប់ផ្តើមថ្មី (Start Fresh)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-confirm" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center z-50 p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm overflow-hidden text-center transform transition-all">
+            <div class="p-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 text-red-600 rounded-full mb-4 ring-4 ring-red-50">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                </div>
+                <h3 class="font-bold text-xl text-slate-800 mb-2">បញ្ជាក់</h3>
+                <p class="text-slate-600 mb-6">តើអ្នកពិតជាចង់លុបទិន្នន័យចាស់ ហើយចាប់ផ្តើមប្រឡងថ្មីមែនទេ?</p>
+                <div class="flex gap-3">
+                    <button onclick="closeConfirmModal()" class="flex-1 bg-white hover:bg-slate-50 text-slate-700 font-bold py-3 px-4 rounded-lg transition-colors border border-slate-300 shadow-sm">
+                        បោះបង់
+                    </button>
+                    <button onclick="forceRestart(); closeConfirmModal()" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition-colors shadow-md">
+                        យល់ព្រម
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data sets for each module
+        const dataMET01 = [
+          {
+    "id": 1,
+    "question": "1) មុខវិជ្ជាសុខភាពសាធារណៈគឺ មុខវិជ្ជាមួយដែលមានគោលបំណងរួម គឺ:",
+    "correct": "C. អោយប្រជាជនទូទៅមានសុខភាពល្អ",
+    "incorrect": [
+      "A. ធ្វើយ៉ាងណាអោយអ្នកជំងឺ ឆាប់ជាសះស្បើយ",
+      "B. ព្យាបាលទាំងអ្នកជំងឺ និង អ្នកមិនឈឺ",
+      "D. ចម្លើយខាងលើសុទ្ធតែខុស"
+    ]
+  },
+  {
+    "id": 2,
+    "question": "2) តើពាក្យអេពីដេមីសាស្ត្រ (Epidemiology) បានមកពីភាសាណា?",
+    "correct": "A. ក្រិក",
+    "incorrect": [
+      "B. អេហ្ស៊ីប",
+      "C. អេស្បាញ",
+      "D. អង់គ្លេស"
+    ]
+  },
+  {
+    "id": 3,
+    "question": "3) ការសិក្សាពិសោធន៍បែបបទពិត (True Experimental) គឺការសិក្សាដែលអ្នកស្រាវជ្រាវបានជ្រើសរើសអ្នកចូលរួមតាម",
+    "correct": "A. បែបចៃដន្យ",
+    "incorrect": [
+      "B. បែប Convenience",
+      "C. បែប Purposive",
+      "D. បែបStratified"
+    ]
+  }
+
+        ];
+
+        const dataMET02 = [
+           {
+    "id": 1,
+    "question": "1) ដូចម្តេចហៅថាការពន្យារកំណើត?",
+    "correct": "C ជាការជ្រើសរើសចំនួនកូនក្នុងគ្រួសារនិងការពន្យារពេលពីកំណើតកូនមួយទៅកំណើតកូនមួយទៀត រយៈពេល៣ឆ្នាំយ៉ាងតិច",
+    "incorrect": [
+      "A គឺជាការជ្រើសរើសចំនួនកូនក្នុងគ្រួសារនិងការពន្យារពេលពីកំណើតកូនមួយទៅកំណើតកូនមួយទៀត",
+      "B ជាការជ្រើសរើសចំនួនកូនក្នុងគ្រួសារនិងពីកំណើតកូនមួយទៅកំណើតកូនមួយទៀតរយៈពេល៣ឆ្នាំ យ៉ាងតិច",
+      "D គឺជាការពន្យារពេលពីកំណើតកូនមួយទៅកំណើតកូនមួយទៀត"
+    ]
+  },
+  {
+    "id": 2,
+    "question": "2) តើមានមធ្យោបាយពន្យារកំណើតអ្វីខ្លះនៅក្នុងកម្មវិធីជាតិ?",
+    "correct": "B មធ្យោបាយធម្មជាតិ មធ្យោបាយដែលគ្មានជាតិអ័រម៉ូន មធ្យោបាយរបាំង និងមធ្យោបាយផ្សេងទៀត",
+    "incorrect": [
+      "A មធ្យោបាយធម្មជាតិ មធ្យោបាយដែលមានជាតិអ័រម៉ូន មធ្យោបាយរបាំង និងមធ្យោបាយផ្សេងទៀត",
+      "C មធ្យោបាយធម្មជាតិ មធ្យោបាយដែលមានជាតិអ័រម៉ូន មធ្យោបាយ ស្រោម និងមធ្យោបាយផ្សេងទៀត",
+      "D មធ្យោបាយដែលមានជាតិអ័រម៉ូន មធ្យោបាយរបាំង និងមធ្យោបាយផ្សេងទៀត"
+    ]
+  },
+  {
+    "id": 3,
+    "question": "3) ចូររៀបរាប់ពីផលប្រយោជន៍នៃការពន្យារកំណើត?",
+    "correct": "D ចំលើយ និង C",
+    "incorrect": [
+      "A ម្តាយនិងកូនមានសុខភាពល្អ មានពេលគ្រប់គ្រាន់សំរាប់ថែទាំកូន អាចបៅដោះម្តាយបានយូរបន្ថយ គ្រោះថ្នាក់ក្នុងពេលស្ត្រីមានផ្ទៃពោះ",
+      "B ម្តាយនិងកូនមានសុខភាពល្អ មានពេលគ្រប់គ្រាន់សំរាប់ថែទាំកូន",
+      "C គ្រួសារមានជីវភាពធូរធារនិងមិនសូវមានបញ្ហានិងជៀសវាងការរំលូតកូនដែលមិនមានសុវត្ថិភាព"
+    ]
+  }      
+        ];
+
+        const dataMET03 = [
+           {
+    "id": 1,
+    "question": "1) តើត្រូវផ្តល់ប្រឹក្សាយោបល់ដល់ស្ត្រីមានផ្ទៃពោះ ពីអ្វីដែលសំខាន់ជាងគេដើម្បីឲ្យទារកក្នុងផ្ទៃលូតលាស់បានល្អ?",
+    "correct": "A ណែនាំស្ត្រីសម្រាកឲ្យបានគ្រប់គ្រាន់",
+    "incorrect": [
+      "B បរិភោគអាហារសំបូរដោយសារធាតុចិញ្ចឹម",
+      "C ជៀសវាងធ្វើការធ្ងន់",
+      "D ណែនាំពីការប្រើប្រាស់សារធាតុហាមឃាត់"
+    ]
+  },
+  {
+    "id": 2,
+    "question": "2) នៅពេលពិនិត្យផ្ទៃពោះដល់ស្ត្រី តើការវាស់កំពស់ស្បូនត្រូវធ្វើនៅពេលណាដើម្បីឲ្យបានត្រឹមត្រូវ?",
+    "correct": "D ពេលស្បូនឈប់កន្ត្រាក់",
+    "incorrect": [
+      "A ពេលស្ត្រីសម្រាកបានត្រឹមត្រូវ",
+      "B ពេលទារកធ្វើចលនា",
+      "C ពេលស្បូនកំពុងកន្ត្រាក់"
+    ]
+  },
+  {
+    "id": 3,
+    "question": "3) ការវាស់កំពស់ស្បូនស្ត្រីពេលមកពិនិត្យផ្ទៃពោះ ត្រូវដាក់ស្ត្រីក្នុងស្ថានភាពដូចម្តេច?",
+    "correct": "B ស្ត្រីគេងផ្ងារសណ្តូកជើង",
+    "incorrect": [
+      "A ស្ត្រីគេងផ្ងារបញ្ឈរជង្គង់",
+      "C ស្ត្រីគេងផ្ទៀងឆ្វេង",
+      "D ស្ត្រីគេងក្នុងស្ថានភាពពាក់កណ្តាលររង្គុយ"
+    ]
+  }
+              ];
+
+        const dataMET04 = [
+           {
+    "id": 1,
+    "question": "1) ដើម្បីកំណត់អាយុគភ៌ក្នុងការរំលូតកូនឆ្មបត្រូវៈ",
+    "image": "",
+    "correct": "កំណត់ពីថ្ងៃខែនៃការមករដូវដោយអេកូ",
+    "incorrect": [
+      "កំណត់ពីថ្ងៃខែដោយការលូកពិនិត្យអាងត្រកាក",
+      "កំណត់ពីថ្ងៃខែដោយការមើលទឹកនោម",
+      "កំណត់ពីថ្ងៃខែដោយវេជ្ជបណ្ឌិត"
+    ]
+  },
+  {
+    "id": 2,
+    "question": "2) ដើម្បីធ្វើការរំលូតកូនតើឆ្មបត្រូវប្រើឱសថបំបាត់ការឈឺចាប់ដូចម្តេច?",
+    "image": "",
+    "correct": "ផ្តល់ឱសថតាមមាត់ ៣០នាទីមុនធ្វើការរំលូត",
+    "incorrect": [
+      "ផ្តល់ឱសថតាមការចាក់ ១០នាទីមុនធ្វើការរំលូត",
+      "ផ្តល់ឱសថតាមការចាក់ ២០នាទីមុនធ្វើការរំលូត",
+      "ផ្តល់ឱសថតាមមាត់ ៦០នាទីមុនធ្វើការរំលូត"
+    ]
+  },
+  {
+    "id": 3,
+    "question": "3) មុនពេលចាប់ផ្តើមបូមសំអាតកូន តើអ្នកផ្តល់សេវាត្រូវធ្វើដូចម្តេច?",
+    "image": "",
+    "correct": "ត្រូវដឹងច្បាស់ពីទំហំនិងទំរង់របស់ស្បូន",
+    "incorrect": [
+      "ត្រូវឲ្យអ្នកជម្ងឺធ្វើកិច្ចព្រមព្រៀង",
+      "ត្រូវដឹងច្បាស់ពីអាយុគភ៌",
+      "ត្រូវធ្វើការពិនិត្យសភាពទូទៅ"
+    ]
+  }
+            
+      ];
+
+	  const dataMET05 = [
+          {
+    "id": 1,
+    "question": "1) តើអ្វីដែលជាសញ្ញាគ្រោះថ្នាក់នៅលើកុមារដែលមានអាយុ២ខែទៅដល់ក្រម៥ឆ្នាំ?",
+    "image": "",
+    "correct": "មិនអាចញាំរឺបៅបាន-ក្អួតគ្មានសល់ក្រោយពេលបៅរីញាំ-ប្រកាច់-សន្លឹមបាត់ស្មារតី",
+    "incorrect": [
+      "មិនអាចញាំរឺបៅបាន-ក្អួតគ្មានសល់ក្រោយពេលបំបៅ-ប្រកាច់-សន្លឹមបាត់ស្មារតី",
+      "មិនអាចញាំរឺបៅបាន-ក្អួតគ្មានសល់ក្រោយពេលបៅរឺញាំ-ប្រកាច់-រញ័រញូវ",
+      "មិនអាចញាំរឺបៅបាន-ដង្ហើមញាប់-ប្រកាច់-សន្លឹមបាត់ស្មារតី"
+    ]
+  },
+  {
+    "id": 2,
+    "question": "2) យើងចាត់ទុកកុមារម្នាក់មានក្តៅខ្លួនតាមរយះ",
+    "image": "",
+    "correct": "វាស់កំដៅ-ស្ទាបដឹង រឺ ម្តាយប្រាប់",
+    "incorrect": [
+      "វាស់កំដៅ-ស្ទាបចុងដៃ រឺ ចុងជើង",
+      "វាស់កំដៅតាមរយះទែម៉ូម៉ែត្រដាក់ត្រចៀក",
+      "វាស់កំដៅ-ស្ទាបដឹង រឺ មើលមុខកុមារ"
+    ]
+  },
+  {
+    "id": 3,
+    "question": "3) តើកំរឹតចង្វាក់ដង្ហើមប៉ុន្មានដែលចាត់ទុកថាញាប់ចំពោះកុមារអាយុពី២ខែ ដល់ក្រោម ១២ ខែ?",
+    "image": "",
+    "correct": "ចាប់ពី ៥០ ដង ក្នុង១នាទីឡើងទៅ",
+    "incorrect": [
+      "ចាប់ពី ៣០ ដង ក្នុង១នាទីឡើងទៅ",
+      "ចាប់ពី ៤០ ដង ក្នុង១នាទីឡើងទៅ",
+      "ចាប់ពី ៦០ ដង ក្នុង១នាទីឡើងទៅ"
+    ]
+  }
+            
+      ];
+
+	  const dataMET06 = [
+            "id": 1,
+    "question": "1) សញ្ញាដែលបញ្ជាក់ថាទារកទទួលទឹកដោះមិនបានគ្រប់គ្រាន់គឺ",
+    "image": "",
+    "correct": "ការឡើងទំងន់តិចនិងបរិមាណទឹកនោមតិចហើយខាប់",
+    "incorrect": [
+      "ទារកមិននោមហើយយំច្រើន",
+      "ទារកបៅយូរ និងមិនស្កប់ស្កល់",
+      "ចំលើយទាំងអស់ត្រឹមត្រូវ"
+    ]
+  },
+  {
+    "id": 2,
+    "question": "2) ចំពោះទារកដែលទទួលទឹកដោះមិនគ្រប់គ្រាន់អាចបណ្តាលមកពី",
+    "image": "",
+    "correct": "ទារកមិនបានជញ្ជក់ដោះគ្រប់គ្រាន់ ឬ គ្មានប្រសិទ្ធភាព",
+    "incorrect": [
+      "ម្តាយទទួលទានចំណីអាហារមិនបានគ្រប់គ្រាន់",
+      "ការបំបៅដោះកូនមានការពន្យារពេលយូរ",
+      "ទារកមានទំងន់ទាប"
+    ]
+  },
+  {
+    "id": 3,
+    "question": "3) ដើម្បីជួយម្តាយអោយបង្កើនការផ្គត់ផ្គង់ទឹកដោះសារឡើងវិញត្រូវ :",
+    "image": "",
+    "correct": "ឱ្យទារកជញ្ជក់ដោះឱ្យបានញឹកញាប់",
+    "incorrect": [
+      "ជំរុញម្តាយបរិភោគអាហារនិងទឹកអោយបានគ្រប់គ្រាន់",
+      "ស្ត្រីសំរាកអោយបានច្រើននិងព្យាយាមសំរួលអារម្មណ៍",
+      "ចំលើយទាំងអស់ត្រឹមត្រូវ"
+    ]
+  }
+            
+      ];
+
+	
+
+        // Global data references
+        const allModulesData = {
+            'MET01': dataMET01,
+            'MET02': dataMET02,
+            'MET03': dataMET03,
+            'MET04': dataMET04,
+	    'MET04': dataMET05,
+	    'MET04': dataMET06,
+            'ALL': [...dataMET01, ...dataMET02, ...dataMET03, ...dataMET04, ..dataMET05, ..dataMET06]
+        };
+
+        // Current active dataset
+        let currentModuleData = allModulesData['MET01'];
+        let currentModuleName = 'MET01';
+
+        // --- Settings & State ---
+        let appSettings = {
+            shuffleQuestions: true,
+            shuffleAnswers: true,
+            autoNext: true,
+            rangeStart: 1,
+            rangeEnd: 100 // Will be updated on load
+        };
+
+        // State object uses the module name as a key to keep progress separate
+        let appState = {
+            activeModule: 'MET01',
+            activeTab: 'lesson',
+            moduleData: {
+                'MET01': { mode: 'quiz', questions: [], currentIndex: 0, score: 0, hasAnsweredCurrent: false, checklistProgress: {}, gameProgress: {} },
+                'MET02': { mode: 'quiz', questions: [], currentIndex: 0, score: 0, hasAnsweredCurrent: false, checklistProgress: {}, gameProgress: {} },
+                'MET03': { mode: 'quiz', questions: [], currentIndex: 0, score: 0, hasAnsweredCurrent: false, checklistProgress: {}, gameProgress: {} },
+                'MET04': { mode: 'quiz', questions: [], currentIndex: 0, score: 0, hasAnsweredCurrent: false, checklistProgress: {}, gameProgress: {} },
+	 	'MET05': { mode: 'quiz', questions: [], currentIndex: 0, score: 0, hasAnsweredCurrent: false, checklistProgress: {}, gameProgress: {} },
+		'MET06': { mode: 'quiz', questions: [], currentIndex: 0, score: 0, hasAnsweredCurrent: false, checklistProgress: {}, gameProgress: {} },
+                'ALL':   { mode: 'quiz', questions: [], currentIndex: 0, score: 0, hasAnsweredCurrent: false, checklistProgress: {}, gameProgress: {} }
+            }
+        };
+        
+        // Convenience pointer to current state
+        let quizState = appState.moduleData[currentModuleName];
+
+        const STORAGE_KEY_SETTINGS = 'medicalApp_settings_v5';
+        const STORAGE_KEY_STATE = 'medicalApp_state_v5';
+        let autoNextTimeout = null;
+
+        // --- Utility Functions ---
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar-tracker');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        function shuffleArray(array) {
+            let newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        // --- Module Switching ---
+        function switchModule(moduleName) {
+            currentModuleName = moduleName;
+            currentModuleData = allModulesData[moduleName];
+            appState.activeModule = moduleName;
+            quizState = appState.moduleData[moduleName];
+
+            // Update UI buttons
+            document.querySelectorAll('.module-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`mod-${moduleName}`).classList.add('active');
+
+            // Update title
+            document.getElementById('lesson-title').innerText = moduleName === 'ALL' ? 'មេរៀនរួម (All Modules)' : `មេរៀន ${moduleName}`;
+
+            // Reset settings range for this module
+            appSettings.rangeEnd = currentModuleData.length;
+            appSettings.rangeStart = 1;
+            
+            saveAppState();
+            
+            // Re-render current tab
+            switchTab(appState.activeTab);
+        }
+
+        // --- Tab Switching ---
+        function switchTab(tab) {
+            appState.activeTab = tab;
+            saveAppState();
+
+            const btnLesson = document.getElementById('tab-lesson');
+            const btnQuiz = document.getElementById('tab-quiz');
+            const btnChecklist = document.getElementById('tab-checklist');
+            
+            const secLesson = document.getElementById('section-lesson');
+            const secQuiz = document.getElementById('section-quiz');
+            const secChecklist = document.getElementById('section-checklist');
+            
+            const inactiveClass = "flex-1 py-3 px-2 text-center font-bold text-slate-500 hover:bg-slate-50 border-b-2 border-transparent transition-colors min-w-[120px]";
+            const activeClass = "flex-1 py-3 px-2 text-center font-bold text-emerald-700 bg-emerald-50 border-b-2 border-emerald-600 transition-colors min-w-[120px]";
+
+            btnLesson.className = inactiveClass;
+            btnQuiz.className = inactiveClass;
+            btnChecklist.className = inactiveClass;
+            secLesson.classList.add('hidden');
+            secQuiz.classList.add('hidden');
+            secChecklist.classList.add('hidden');
+
+            if (tab === 'lesson') {
+                btnLesson.className = activeClass;
+                secLesson.classList.remove('hidden');
+                renderLessonMode();
+                renderTracker();
+            } else if (tab === 'quiz') {
+                btnQuiz.className = activeClass;
+                secQuiz.classList.remove('hidden');
+                
+                if(quizState.mode !== 'quiz' || quizState.questions.length === 0) {
+                    quizState.mode = 'quiz';
+                    checkResumeOrRestart();
+                } else {
+                    renderQuiz();
+                }
+            } else if (tab === 'checklist') {
+                btnChecklist.className = activeClass;
+                secChecklist.classList.remove('hidden');
+                
+                if(quizState.mode !== 'checklist' || quizState.questions.length === 0) {
+                    quizState.mode = 'checklist';
+                    checkResumeOrRestart();
+                } else {
+                    renderChecklist();
+                }
+            }
+        }
+        
+        function checkResumeOrRestart() {
+            if (quizState.questions && quizState.questions.length > 0) {
+                let hasProgress = false;
+                if (quizState.mode === 'quiz' && quizState.currentIndex > 0 && quizState.currentIndex < quizState.questions.length) {
+                    hasProgress = true;
+                } else if (quizState.mode === 'checklist' && Object.keys(quizState.checklistProgress || {}).length > 0) {
+                    hasProgress = true;
+                }
+
+                if (hasProgress) {
+                    document.getElementById('modal-resume').classList.remove('hidden');
+                    return;
+                }
+            }
+            forceRestart();
+        }
+
+        // --- Settings Management ---
+        function loadSettings() {
+            const saved = localStorage.getItem(STORAGE_KEY_SETTINGS);
+            if (saved) {
+                appSettings = {...appSettings, ...JSON.parse(saved)};
+            }
+            // Ensure bounds for current module
+            if(appSettings.rangeEnd > currentModuleData.length) appSettings.rangeEnd = currentModuleData.length;
+            if(appSettings.rangeStart < 1) appSettings.rangeStart = 1;
+            
+            updateSettingsUI();
+        }
+
+        function updateSettingsUI() {
+            document.getElementById('total-q-count').innerText = currentModuleData.length;
+            document.getElementById('setting-shuffle-q').checked = appSettings.shuffleQuestions;
+            document.getElementById('setting-shuffle-a').checked = appSettings.shuffleAnswers;
+            document.getElementById('setting-auto-next').checked = appSettings.autoNext;
+            document.getElementById('setting-range-start').value = appSettings.rangeStart;
+            document.getElementById('setting-range-end').value = appSettings.rangeEnd;
+        }
+
+        function saveSettings() {
+            let start = parseInt(document.getElementById('setting-range-start').value);
+            let end = parseInt(document.getElementById('setting-range-end').value);
+            let errorEl = document.getElementById('range-error');
+            
+            if (isNaN(start) || isNaN(end) || start < 1 || end > currentModuleData.length || start > end) {
+                errorEl.classList.remove('hidden');
+                return false;
+            }
+            errorEl.classList.add('hidden');
+
+            appSettings.rangeStart = start;
+            appSettings.rangeEnd = end;
+            appSettings.shuffleQuestions = document.getElementById('setting-shuffle-q').checked;
+            appSettings.shuffleAnswers = document.getElementById('setting-shuffle-a').checked;
+            appSettings.autoNext = document.getElementById('setting-auto-next').checked;
+            
+            localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify(appSettings));
+            return true;
+        }
+
+        function openSettings() {
+            updateSettingsUI();
+            document.getElementById('range-error').classList.add('hidden');
+            document.getElementById('modal-settings').classList.remove('hidden');
+        }
+
+        function closeSettings() {
+            document.getElementById('modal-settings').classList.add('hidden');
+        }
+
+        function closeSettingsAndRestartIfChanged() {
+            if(saveSettings()) {
+                closeSettings();
+                forceRestart();
+            }
+        }
+
+        // --- Data Persistence ---
+        function saveAppState() {
+            localStorage.setItem(STORAGE_KEY_STATE, JSON.stringify(appState));
+        }
+
+        function loadAppState() {
+            const saved = localStorage.getItem(STORAGE_KEY_STATE);
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                // Merge loaded state to ensure structure exists
+                appState.activeModule = parsed.activeModule || 'MET01';
+                appState.activeTab = parsed.activeTab || 'lesson';
+                
+                for(const mod in appState.moduleData) {
+                    if(parsed.moduleData && parsed.moduleData[mod]) {
+                         appState.moduleData[mod] = parsed.moduleData[mod];
+                    }
+                }
+            }
+            
+            // Set pointers
+            currentModuleName = appState.activeModule;
+            currentModuleData = allModulesData[currentModuleName];
+            quizState = appState.moduleData[currentModuleName];
+            
+            // Update UI for module
+            document.querySelectorAll('.module-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.getElementById(`mod-${currentModuleName}`);
+            if(activeBtn) activeBtn.classList.add('active');
+            document.getElementById('lesson-title').innerText = currentModuleName === 'ALL' ? 'មេរៀនរួម (All Modules)' : `មេរៀន ${currentModuleName}`;
+        }
+
+        // --- Generative Data ---
+        function generateQuizData() {
+            let activeQuestions = currentModuleData.slice(appSettings.rangeStart - 1, appSettings.rangeEnd);
+            
+            if (appSettings.shuffleQuestions) {
+                activeQuestions = shuffleArray(activeQuestions);
+            }
+
+            return activeQuestions.map((q, idx) => {
+                let options = [
+                    { text: q.correct, isCorrect: true },
+                    ...q.incorrect.map(inc => ({ text: inc, isCorrect: false }))
+                ];
+
+                if (appSettings.shuffleAnswers) {
+                    options = shuffleArray(options);
+                }
+
+                // Find original index relative to the specific module
+                const origIndex = currentModuleData.findIndex(item => item.id === q.id) + 1;
+
+                return {
+                    id: q.id,
+                    module: q.module,
+                    question: q.question,
+                    image: q.image || null,
+                    options: options,
+                    originalIndex: origIndex
+                };
+            });
+        }
+
+        function promptRestart() {
+            document.getElementById('modal-confirm').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('modal-confirm').classList.add('hidden');
+        }
+        
+        function closeResumeModal() {
+            document.getElementById('modal-resume').classList.add('hidden');
+        }
+
+        function forceRestart() {
+            if(autoNextTimeout) clearTimeout(autoNextTimeout);
+            const currentMode = quizState.mode || 'quiz';
+            
+            // Reset state for current module only
+            appState.moduleData[currentModuleName] = {
+                questions: generateQuizData(),
+                currentIndex: 0,
+                score: 0,
+                hasAnsweredCurrent: false,
+                mode: currentMode,
+                checklistProgress: {},
+                gameProgress: {}
+            };
+            quizState = appState.moduleData[currentModuleName];
+            
+            saveAppState();
+            
+            if(currentMode === 'quiz') {
+                renderQuiz();
+            } else {
+                renderChecklist();
+            }
+        }
+
+        function resumeSession() {
+            document.getElementById('modal-resume').classList.add('hidden');
+            if(quizState.mode === 'quiz') {
+                renderQuiz();
+            } else {
+                renderChecklist();
+            }
+        }
+
+        // --- Lesson Mode Render ---
+        function renderLessonMode() {
+            const container = document.getElementById('lesson-container');
+            container.innerHTML = '';
+            
+            const displayData = currentModuleData.slice(appSettings.rangeStart - 1, appSettings.rangeEnd);
+
+            if(displayData.length === 0) {
+                 container.innerHTML = '<div class="text-center py-10 text-slate-500">គ្មានទិន្នន័យ។ សូមពិនិត្យការកំណត់ Range។</div>';
+                 return;
+            }
+
+            displayData.forEach((q, index) => {
+                const item = document.createElement('div');
+                item.className = 'border rounded-lg p-5 bg-slate-50 relative shadow-sm';
+
+                let imageHtml = '';
+                if (q.image) {
+                    imageHtml = `<div class="mb-4"><img src="${q.image}" class="max-w-full md:max-w-xl h-auto rounded shadow-sm border border-slate-200"></div>`;
+                }
+
+                let optionsHtml = `<div class="p-3 mb-2 rounded-md correct-answer-highlight text-emerald-900 font-medium flex gap-2"><svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <span>${q.correct}</span></div>`;
+                
+                q.incorrect.forEach(inc => {
+                    optionsHtml += `<div class="p-3 mb-2 rounded-md bg-white border text-slate-600 flex gap-2"><svg class="w-5 h-5 text-slate-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg> <span>${inc}</span></div>`;
+                });
+
+                const realIndex = (appSettings.rangeStart - 1) + index + 1;
+                item.innerHTML = `
+                    <div class="absolute top-0 right-0 bg-slate-200 text-slate-600 font-bold text-xs px-3 py-1.5 rounded-bl-lg rounded-tr-lg">${currentModuleName !== 'ALL' ? 'Q.' + realIndex : q.module}</div>
+                    <h3 class="font-bold text-lg mb-3 pt-2">${q.question}</h3>
+                    ${imageHtml}
+                    <div class="mt-4">${optionsHtml}</div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // --- Tracker Render ---
+        function renderTracker() {
+            const container = document.getElementById('question-circles-container');
+            container.innerHTML = '';
+            
+            const isLessonMode = !document.getElementById('section-lesson').classList.contains('hidden');
+            if (isLessonMode || !quizState.questions || quizState.questions.length === 0) {
+                container.innerHTML = '<p class="text-sm text-slate-500 w-full text-center mt-4">មិនមានទិន្នន័យសម្រាប់តាមដានទេ</p>';
+                return;
+            }
+
+            quizState.questions.forEach((q, index) => {
+                const circle = document.createElement('button');
+                circle.innerText = index + 1;
+                circle.className = 'w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-400 shrink-0';
+                
+                let state = 'unanswered';
+                
+                if (quizState.mode === 'quiz') {
+                    const ansData = quizState.gameProgress[index];
+                    if (ansData) {
+                        state = ansData.isCorrect ? 'correct' : 'incorrect';
+                    } else if (index === quizState.currentIndex) {
+                        state = 'current';
+                    }
+                } else if (quizState.mode === 'checklist') {
+                    const ansData = quizState.checklistProgress[q.id];
+                    if (ansData) {
+                        state = ansData.isCorrect ? 'correct' : 'incorrect';
+                    }
+                }
+
+                if (state === 'unanswered') {
+                    circle.classList.add('bg-white', 'border', 'border-slate-300', 'text-slate-600', 'hover:bg-slate-100');
+                } else if (state === 'current') {
+                    circle.classList.add('bg-sky-100', 'border-2', 'border-sky-400', 'text-sky-800');
+                } else if (state === 'correct') {
+                    circle.classList.add('bg-emerald-500', 'border', 'border-emerald-600', 'text-white', 'hover:bg-emerald-600');
+                } else if (state === 'incorrect') {
+                    circle.classList.add('bg-red-500', 'border', 'border-red-600', 'text-white', 'hover:bg-red-600');
+                }
+
+                circle.onclick = () => {
+                    if (quizState.mode === 'quiz') {
+                        if(autoNextTimeout) clearTimeout(autoNextTimeout);
+                        quizState.currentIndex = index;
+                        saveAppState();
+                        renderQuiz();
+                    } else if (quizState.mode === 'checklist') {
+                        document.getElementById(`checklist-item-${q.id}`)?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                    if(window.innerWidth < 768) toggleSidebar();
+                };
+                
+                container.appendChild(circle);
+            });
+            
+            if (quizState.mode === 'quiz') {
+                const circles = container.querySelectorAll('button');
+                if(circles[quizState.currentIndex]) {
+                     circles[quizState.currentIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            }
+        }
+
+        // --- Game Mode Logic ---
+        function renderQuiz() {
+            if(autoNextTimeout) clearTimeout(autoNextTimeout);
+            document.getElementById('modal-resume').classList.add('hidden');
+
+            const activeArea = document.getElementById('quiz-active-area');
+            const completedArea = document.getElementById('quiz-completed-area');
+            const trackerQ = document.getElementById('question-tracker');
+            const trackerS = document.getElementById('score-tracker');
+
+            if (!quizState.questions || quizState.currentIndex >= quizState.questions.length || quizState.questions.length === 0) {
+                activeArea.classList.add('hidden');
+                completedArea.classList.remove('hidden');
+                trackerQ.innerText = `បញ្ចប់ការប្រឡង`;
+                document.getElementById('final-score-text').innerText = `${quizState.score} / ${quizState.questions ? quizState.questions.length : 0}`;
+                renderTracker();
+                return;
+            }
+
+            activeArea.classList.remove('hidden');
+            completedArea.classList.add('hidden');
+
+            const q = quizState.questions[quizState.currentIndex];
+            
+            const answeredData = quizState.gameProgress[quizState.currentIndex];
+            quizState.hasAnsweredCurrent = !!answeredData;
+            
+            trackerQ.innerText = `សំណួរទី ${quizState.currentIndex + 1} / ${quizState.questions.length}`;
+            trackerS.innerText = `ពិន្ទុ: ${quizState.score}`;
+
+            let qInfo = currentModuleName === 'ALL' ? `[${q.module}] សំណួរទី ${q.originalIndex}` : `សំណួរដើមទី ${q.originalIndex}`;
+            document.getElementById('quiz-question-text').innerHTML = `<span class="text-slate-400 font-normal text-sm block mb-1">${qInfo}</span>${q.question}`;
+            
+            const imgContainer = document.getElementById('quiz-image-container');
+            const imgEl = document.getElementById('quiz-image');
+            if (q.image) {
+                imgEl.src = q.image;
+                imgContainer.classList.remove('hidden');
+            } else {
+                imgContainer.classList.add('hidden');
+            }
+
+            const optContainer = document.getElementById('quiz-options-container');
+            optContainer.innerHTML = '';
+
+            q.options.forEach((opt, index) => {
+                const label = document.createElement('label');
+                let isChecked = answeredData && answeredData.selectedText === opt.text;
+                
+                label.className = "relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm transition-colors game-option-label";
+                if(!quizState.hasAnsweredCurrent) label.classList.add('hover:bg-slate-50');
+                
+                label.innerHTML = `
+                    <input type="radio" name="answer_radio" value="${opt.isCorrect}" data-text="${opt.text}" class="option-radio sr-only" ${quizState.hasAnsweredCurrent ? 'disabled' : ''} ${isChecked ? 'checked' : ''}>
+                    <div class="absolute inset-0 rounded-lg border-2 border-transparent pointer-events-none transition-colors border-overlay"></div>
+                    <div class="flex items-center justify-center w-6 h-6 rounded-full border ${isChecked ? 'border-emerald-600' : 'border-slate-300'} mr-4 shrink-0 bg-white relative z-10 check-indicator">
+                        <div class="w-3 h-3 bg-emerald-600 rounded-full ${isChecked ? '' : 'hidden'}"></div>
+                    </div>
+                    <span class="text-slate-700 font-medium relative z-10">${opt.text}</span>
+                `;
+                
+                const radio = label.querySelector('input');
+                radio.addEventListener('change', function() {
+                    document.querySelectorAll('.game-option-label').forEach(el => {
+                        el.classList.remove('bg-emerald-50');
+                        el.querySelector('.border-overlay').classList.remove('border-emerald-500');
+                        el.querySelector('.border-overlay').classList.add('border-transparent');
+                    });
+                    document.querySelectorAll('.game-option-label .check-indicator').forEach(el => {
+                        el.classList.remove('border-emerald-600');
+                        el.classList.add('border-slate-300');
+                    });
+                    document.querySelectorAll('.game-option-label .check-indicator > div').forEach(el => el.classList.add('hidden'));
+                    
+                    if(this.checked) {
+                        const parent = this.parentNode;
+                        parent.classList.add('bg-emerald-50');
+                        parent.querySelector('.border-overlay').classList.remove('border-transparent');
+                        parent.querySelector('.border-overlay').classList.add('border-emerald-500');
+
+                        const indicator = parent.querySelector('.check-indicator');
+                        indicator.classList.remove('border-slate-300');
+                        indicator.classList.add('border-emerald-600');
+                        indicator.querySelector('div').classList.remove('hidden');
+                        
+                        if(appSettings.autoNext && !quizState.hasAnsweredCurrent) {
+                            submitAnswer();
+                        }
+                    }
+                });
+
+                optContainer.appendChild(label);
+            });
+
+            const btnSubmit = document.getElementById('btn-submit');
+            const btnNext = document.getElementById('btn-next');
+            const feedback = document.getElementById('quiz-feedback');
+            
+            if (quizState.hasAnsweredCurrent) {
+                feedback.classList.remove('hidden');
+                if (answeredData.isCorrect) {
+                    feedback.innerHTML = `✓ ត្រឹមត្រូវ (Correct!)`;
+                    feedback.className = "p-4 rounded-lg mb-6 font-bold text-lg bg-emerald-100 text-emerald-800 border border-emerald-200 block";
+                } else {
+                    const correctText = q.options.find(o => o.isCorrect).text;
+                    feedback.innerHTML = `✗ មិនត្រឹមត្រូវ! <br><span class="text-sm font-normal mt-1 block">ចម្លើយត្រឹមត្រូវគឺ៖ ${correctText}</span>`;
+                    feedback.className = "p-4 rounded-lg mb-6 font-bold text-lg bg-red-100 text-red-800 border border-red-200 block";
+                }
+                
+                document.querySelectorAll('input[name="answer_radio"]').forEach(input => {
+                    const parent = input.parentNode;
+                    parent.classList.remove('hover:bg-slate-50');
+                    if (input.value === 'true') {
+                        parent.classList.add('bg-emerald-50');
+                        parent.querySelector('.border-overlay').classList.add('border-emerald-500');
+                        parent.querySelector('.border-overlay').classList.remove('border-transparent');
+                    } else if (input.checked) {
+                        parent.classList.add('bg-red-50');
+                        parent.querySelector('.border-overlay').classList.add('border-red-500');
+                        parent.querySelector('.border-overlay').classList.remove('border-transparent');
+                    }
+                });
+
+                btnSubmit.classList.add('hidden');
+                btnNext.classList.remove('hidden');
+            } else {
+                feedback.classList.add('hidden');
+                feedback.className = "hidden p-4 rounded-lg mb-6 font-bold text-lg";
+                
+                if(appSettings.autoNext) {
+                    btnSubmit.classList.add('hidden');
+                } else {
+                    btnSubmit.classList.remove('hidden');
+                }
+                btnNext.classList.add('hidden');
+            }
+            
+            renderTracker();
+        }
+
+        function submitAnswer() {
+            if (quizState.hasAnsweredCurrent) return;
+
+            const selected = document.querySelector('input[name="answer_radio"]:checked');
+            if (!selected) {
+                const feedback = document.getElementById('quiz-feedback');
+                feedback.innerText = "សូមជ្រើសរើសចម្លើយសិន!";
+                feedback.className = "p-4 rounded-lg mb-6 font-bold text-lg bg-amber-100 text-amber-800 border border-amber-200";
+                feedback.classList.remove('hidden');
+                return;
+            }
+
+            quizState.hasAnsweredCurrent = true;
+            const isCorrect = selected.value === 'true';
+            const selectedText = selected.getAttribute('data-text');
+            
+            quizState.gameProgress[quizState.currentIndex] = {
+                isCorrect: isCorrect,
+                selectedText: selectedText
+            };
+
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.classList.remove('hidden');
+
+            if (isCorrect) {
+                quizState.score++;
+                feedback.innerHTML = `✓ ត្រឹមត្រូវ (Correct!)`;
+                feedback.className = "p-4 rounded-lg mb-6 font-bold text-lg bg-emerald-100 text-emerald-800 border border-emerald-200 block";
+            } else {
+                const currentQ = quizState.questions[quizState.currentIndex];
+                const correctText = currentQ.options.find(o => o.isCorrect).text;
+                feedback.innerHTML = `✗ មិនត្រឹមត្រូវ! <br><span class="text-sm font-normal mt-1 block">ចម្លើយត្រឹមត្រូវគឺ៖ ${correctText}</span>`;
+                feedback.className = "p-4 rounded-lg mb-6 font-bold text-lg bg-red-100 text-red-800 border border-red-200 block";
+            }
+
+            document.querySelectorAll('input[name="answer_radio"]').forEach(input => {
+                input.disabled = true;
+                const parent = input.parentNode;
+                parent.classList.remove('hover:bg-slate-50');
+                
+                if (input.value === 'true') {
+                    parent.classList.add('bg-emerald-50');
+                    parent.querySelector('.border-overlay').classList.add('border-emerald-500');
+                    parent.querySelector('.border-overlay').classList.remove('border-transparent');
+                }
+                else if (input.checked) {
+                     parent.classList.add('bg-red-50');
+                     parent.querySelector('.border-overlay').classList.add('border-red-500');
+                     parent.querySelector('.border-overlay').classList.remove('border-transparent');
+                }
+            });
+
+            document.getElementById('score-tracker').innerText = `ពិន្ទុ: ${quizState.score}`;
+            document.getElementById('btn-submit').classList.add('hidden');
+            
+            saveAppState();
+            renderTracker();
+            
+            if(appSettings.autoNext) {
+                autoNextTimeout = setTimeout(() => {
+                    nextQuestion();
+                }, 1500); 
+            } else {
+                document.getElementById('btn-next').classList.remove('hidden');
+            }
+        }
+
+        function nextQuestion() {
+            quizState.currentIndex++;
+            quizState.hasAnsweredCurrent = false;
+            saveAppState();
+            renderQuiz();
+        }
+
+        // --- Checklist Mode Logic ---
+        function renderChecklist() {
+            document.getElementById('modal-resume').classList.add('hidden');
+            const container = document.getElementById('checklist-container');
+            container.innerHTML = '';
+            
+            if(!quizState.checklistProgress) quizState.checklistProgress = {};
+
+            if(!quizState.questions || quizState.questions.length === 0) {
+                container.innerHTML = '<div class="text-center py-10 text-slate-500">គ្មានសំណួរសម្រាប់បង្ហាញទេ។ សូមកំណត់ Range សំណួរឡើងវិញ។</div>';
+                renderTracker();
+                return;
+            }
+
+            quizState.questions.forEach((q, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.id = `checklist-item-${q.id}`;
+                itemDiv.className = 'checklist-item border rounded-lg p-5 bg-slate-50 relative shadow-sm';
+                
+                const answeredData = quizState.checklistProgress[q.id];
+                const isAnswered = !!answeredData;
+
+                let imageHtml = '';
+                if (q.image) {
+                    imageHtml = `<div class="mb-4"><img src="${q.image}" class="max-w-full md:max-w-xl h-auto rounded shadow-sm border border-slate-200"></div>`;
+                }
+                
+                let optionsHtml = `<div class="space-y-2 mt-4" id="options-for-${q.id}">`;
+                q.options.forEach(opt => {
+                    let isChecked = isAnswered && answeredData.selectedText === opt.text;
+                    let extraClass = "hover:bg-slate-100";
+                    let overlayClass = "border-transparent";
+                    
+                    if(isAnswered) {
+                        extraClass = "";
+                        if(opt.isCorrect) {
+                            extraClass = "bg-emerald-50";
+                            overlayClass = "border-emerald-500";
+                        } else if(isChecked) {
+                            extraClass = "bg-red-50";
+                            overlayClass = "border-red-500";
+                        }
+                    }
+
+                    optionsHtml += `
+                        <label class="relative flex cursor-pointer rounded-lg border bg-white p-3 shadow-sm transition-colors ${extraClass}">
+                            <input type="radio" name="chk_ans_${q.id}" value="${opt.isCorrect}" data-text="${opt.text}" class="sr-only" ${isAnswered ? 'disabled' : ''} ${isChecked ? 'checked' : ''}>
+                            <div class="absolute inset-0 rounded-lg border-2 pointer-events-none transition-colors overlay-chk ${overlayClass}"></div>
+                            <div class="flex items-center justify-center w-5 h-5 rounded-full border ${isChecked ? 'border-emerald-600' : 'border-slate-300'} mr-3 shrink-0 bg-white relative z-10 check-indicator">
+                                <div class="w-2.5 h-2.5 bg-emerald-600 rounded-full ${isChecked ? '' : 'hidden'}"></div>
+                            </div>
+                            <span class="text-slate-700 relative z-10">${opt.text}</span>
+                        </label>
+                    `;
+                });
+                optionsHtml += `</div>`;
+
+                let actionHtml = '';
+                if(!isAnswered) {
+                    actionHtml = `
+                        <div class="mt-4 pt-4 border-t flex justify-end items-center gap-4" id="action-for-${q.id}">
+                            <div id="feedback-${q.id}" class="text-sm font-bold hidden"></div>
+                            <button onclick="checkChecklistAnswer('${q.id}')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md shadow-sm transition-transform active:scale-95 text-sm">
+                                Check ចម្លើយ
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    let fMsg = answeredData.isCorrect ? "✓ ត្រឹមត្រូវ" : "✗ មិនត្រឹមត្រូវ";
+                    let fColor = answeredData.isCorrect ? "text-emerald-600" : "text-red-600";
+                    actionHtml = `
+                        <div class="mt-4 pt-4 border-t flex justify-end items-center">
+                            <span class="font-bold ${fColor}">${fMsg}</span>
+                        </div>
+                    `;
+                }
+
+                let qInfo = currentModuleName === 'ALL' ? `[${q.module}] សំណួរទី ${q.originalIndex}` : `សំណួរដើមទី ${q.originalIndex}`;
+                itemDiv.innerHTML = `
+                    <div class="absolute top-0 right-0 bg-slate-200 text-slate-600 font-bold text-xs px-3 py-1.5 rounded-bl-lg rounded-tr-lg shadow-sm">${qInfo}</div>
+                    <h3 class="font-bold text-lg mb-3 pt-2"><span class="text-emerald-700 mr-1">${index + 1}.</span> ${q.question}</h3>
+                    ${imageHtml}
+                    ${optionsHtml}
+                    ${actionHtml}
+                `;
+                container.appendChild(itemDiv);
+                
+                if(!isAnswered) {
+                    const labels = itemDiv.querySelectorAll(`input[name="chk_ans_${q.id}"]`);
+                    labels.forEach(radio => {
+                        radio.addEventListener('change', function() {
+                            const parentItem = this.closest('.checklist-item');
+                            
+                            parentItem.querySelectorAll('label').forEach(label => {
+                                label.classList.remove('bg-emerald-50');
+                                label.querySelector('.overlay-chk').classList.remove('border-emerald-500');
+                                label.querySelector('.overlay-chk').classList.add('border-transparent');
+                                label.querySelector('.check-indicator').classList.remove('border-emerald-600');
+                                label.querySelector('.check-indicator').classList.add('border-slate-300');
+                                label.querySelector('.check-indicator > div').classList.add('hidden');
+                            });
+                            
+                            if(this.checked) {
+                                const parentLabel = this.parentNode;
+                                parentLabel.classList.add('bg-emerald-50');
+                                parentLabel.querySelector('.overlay-chk').classList.remove('border-transparent');
+                                parentLabel.querySelector('.overlay-chk').classList.add('border-emerald-500');
+
+                                const indicator = parentLabel.querySelector('.check-indicator');
+                                indicator.classList.remove('border-slate-300');
+                                indicator.classList.add('border-emerald-600');
+                                indicator.querySelector('div').classList.remove('hidden');
+                                
+                                document.getElementById(`feedback-${q.id}`).classList.add('hidden');
+                            }
+                        });
+                    });
+                }
+            });
+            
+            updateChecklistTracker();
+            renderTracker();
+        }
+
+        function checkChecklistAnswer(questionId) {
+            const selected = document.querySelector(`input[name="chk_ans_${questionId}"]:checked`);
+            const feedbackEl = document.getElementById(`feedback-${questionId}`);
+            
+            if (!selected) {
+                feedbackEl.innerText = "សូមជ្រើសរើសចម្លើយ!";
+                feedbackEl.className = "text-sm font-bold text-amber-600 mr-4 block";
+                return;
+            }
+
+            const isCorrect = selected.value === 'true';
+            const selectedText = selected.getAttribute('data-text');
+            
+            quizState.checklistProgress[questionId] = {
+                answered: true,
+                isCorrect: isCorrect,
+                selectedText: selectedText
+            };
+            saveAppState();
+
+            const itemDiv = document.getElementById(`checklist-item-${questionId}`);
+            const inputs = itemDiv.querySelectorAll('input[type="radio"]');
+            
+            inputs.forEach(input => {
+                input.disabled = true;
+                const label = input.parentNode;
+                label.classList.remove('hover:bg-slate-100');
+                
+                if (input.value === 'true') {
+                    label.classList.add('bg-emerald-50');
+                    label.querySelector('.overlay-chk').classList.add('border-emerald-500');
+                    label.querySelector('.overlay-chk').classList.remove('border-transparent');
+                } else if (input.checked) {
+                    label.classList.add('bg-red-50');
+                    label.querySelector('.overlay-chk').classList.add('border-red-500');
+                    label.querySelector('.overlay-chk').classList.remove('border-transparent');
+                }
+            });
+
+            const actionContainer = document.getElementById(`action-for-${questionId}`);
+            let fMsg = isCorrect ? "✓ ត្រឹមត្រូវ" : "✗ មិនត្រឹមត្រូវ";
+            let fColor = isCorrect ? "text-emerald-600" : "text-red-600";
+            actionContainer.innerHTML = `<span class="font-bold ${fColor}">${fMsg}</span>`;
+            
+            updateChecklistTracker();
+            renderTracker();
+        }
+        
+        function updateChecklistTracker() {
+            const total = quizState.questions ? quizState.questions.length : 0;
+            const answered = Object.keys(quizState.checklistProgress || {}).length;
+            document.getElementById('checklist-tracker').innerText = `បញ្ចប់: ${answered}/${total}`;
+            
+            if(total > 0 && answered === total) {
+                document.getElementById('checklist-completed-message').classList.remove('hidden');
+            } else {
+                document.getElementById('checklist-completed-message').classList.add('hidden');
+            }
+        }
+
+        // --- Initialization ---
+        window.onload = () => {
+            loadSettings();
+            loadAppState();
+            switchTab(appState.activeTab); // Will call render based on active tab
+        };
+
+    </script>
+</body>
+</html>
